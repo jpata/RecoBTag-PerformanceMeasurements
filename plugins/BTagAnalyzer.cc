@@ -281,6 +281,8 @@ private:
   std::string trackCHPBJetTags_;
   std::string trackCNegHPBJetTags_;
   
+  std::string combinedMVABJetTags_;
+  std::string combinedMVANEWBJetTags_;
   std::string combinedSVBJetTags_;
   std::string combinedSVNegBJetTags_;
   std::string combinedSVPosBJetTags_;
@@ -500,6 +502,8 @@ BTagAnalyzerT<IPTI,VTX>::BTagAnalyzerT(const edm::ParameterSet& iConfig):
   simpleSVHighPurBJetTags_      = iConfig.getParameter<std::string>("simpleSVHighPurBJetTags");
   simpleSVNegHighPurBJetTags_   = iConfig.getParameter<std::string>("simpleSVNegHighPurBJetTags");
 
+  combinedMVABJetTags_     = iConfig.getParameter<std::string>("combinedMVABJetTags");
+  combinedMVANEWBJetTags_     = iConfig.getParameter<std::string>("combinedMVANEWBJetTags");
   combinedSVBJetTags_     = iConfig.getParameter<std::string>("combinedSVBJetTags");
   combinedSVNegBJetTags_  = iConfig.getParameter<std::string>("combinedSVNegBJetTags");
   combinedSVPosBJetTags_  = iConfig.getParameter<std::string>("combinedSVPosBJetTags");
@@ -1450,6 +1454,9 @@ void BTagAnalyzerT<IPTI,VTX>::processJets(const edm::Handle<PatJetCollection>& j
   //// Loop over the jets
   for ( PatJetCollection::const_iterator pjet = jetsColl->begin(); pjet != jetsColl->end(); ++pjet ) {
 
+    //const unsigned int idx = pjet - jetsColl->begin();
+    //edm::RefToBase<reco::Jet> jetRef(*jetsColl, idx);
+
     double ptjet  = pjet->pt()  ;
     double etajet = pjet->eta() ;
     double phijet = pjet->phi() ;
@@ -2102,6 +2109,20 @@ void BTagAnalyzerT<IPTI,VTX>::processJets(const edm::Handle<PatJetCollection>& j
     float BprobN = pjet->bDiscriminator(jetBPNegBJetTags_.c_str());
     float BprobP = pjet->bDiscriminator(jetBPPosBJetTags_.c_str());
 
+    //auto cMVADiscriminatorToken = mayConsume<reco::JetFloatAssociation::Container>(edm::InputTag("pfCombinedMVABJetTags"));
+    //auto cMVANEWDiscriminatorToken = mayConsume<reco::JetFloatAssociation::Container>(edm::InputTag("pfCombinedMVANEWBJetTags"));
+    //
+    //edm::Handle<reco::JetFloatAssociation::Container> cMVADiscriminator;
+    //edm::Handle<reco::JetFloatAssociation::Container> cMVANEWDiscriminator;
+    //iEvent.getByToken(cMVADiscriminatorToken, cMVADiscriminator);
+    //iEvent.getByToken(cMVANEWDiscriminatorToken, cMVANEWDiscriminator);
+
+    //float CombinedMVA = (*cMVADiscriminator)[jetRef];
+    //float CombinedMVANEW  = (*cMVANEWDiscriminator)[jetRef]; 
+    float CombinedMVA = pjet->bDiscriminator(combinedMVABJetTags_.c_str());
+    float CombinedMVANEW = pjet->bDiscriminator(combinedMVANEWBJetTags_.c_str());
+    //std::cout << "combMVA " << CombinedMVA << " " << CombinedMVANEW << std::endl;
+
     float CombinedSvtx  = pjet->bDiscriminator(combinedSVBJetTags_.c_str());
     float CombinedSvtxN = pjet->bDiscriminator(combinedSVNegBJetTags_.c_str());
     float CombinedSvtxP = pjet->bDiscriminator(combinedSVPosBJetTags_.c_str());
@@ -2136,6 +2157,8 @@ void BTagAnalyzerT<IPTI,VTX>::processJets(const edm::Handle<PatJetCollection>& j
     JetInfo[iJetColl].Jet_Svx[JetInfo[iJetColl].nJet]      = Svtx;
     JetInfo[iJetColl].Jet_SvxNHP[JetInfo[iJetColl].nJet]   = SvtxNHP;
     JetInfo[iJetColl].Jet_SvxHP[JetInfo[iJetColl].nJet]    = SvtxHP;
+    JetInfo[iJetColl].Jet_CombMVA[JetInfo[iJetColl].nJet] = CombinedMVA;
+    JetInfo[iJetColl].Jet_CombMVANEW[JetInfo[iJetColl].nJet] = CombinedMVANEW;
     JetInfo[iJetColl].Jet_CombSvxN[JetInfo[iJetColl].nJet] = CombinedSvtxN;
     JetInfo[iJetColl].Jet_CombSvxP[JetInfo[iJetColl].nJet] = CombinedSvtxP;
     JetInfo[iJetColl].Jet_CombSvx[JetInfo[iJetColl].nJet]  = CombinedSvtx;

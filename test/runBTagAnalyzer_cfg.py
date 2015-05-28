@@ -50,7 +50,7 @@ options.register('runFatJets', True,
     VarParsing.varType.bool,
     "Run fat jets"
 )
-options.register('runSubJets', True,
+options.register('runSubJets', False,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "Run subjets"
@@ -201,6 +201,8 @@ bTagDiscriminatorsLegacy = [
    ,'softPFElectronBJetTags'
    ,'positiveSoftPFElectronBJetTags'
    ,'negativeSoftPFElectronBJetTags'
+   ,'combinedMVABJetTags'
+   ,'combinedMVABJetTagsNEW'
 ]
 bTagDiscriminators = [
     'pfJetBProbabilityBJetTags'
@@ -229,6 +231,8 @@ bTagDiscriminators = [
    ,'softPFElectronBJetTags'
    ,'positiveSoftPFElectronBJetTags'
    ,'negativeSoftPFElectronBJetTags'
+   ,'pfCombinedMVABJetTags'
+   ,'pfCombinedMVANEWBJetTags'
 ]
 
 ## Legacy taggers not supported with MiniAOD
@@ -272,6 +276,27 @@ if options.miniAOD:
 
 process = cms.Process("BTagAna")
 
+############################
+#DB FILE WITH ALL RECORDS +  NEW cMVA RECORD!!!
+process.load("CondCore.DBCommon.CondDBSetup_cfi")
+process.BTauMVAJetTagComputerRecord = cms.ESSource("PoolDBESSource",
+   process.CondDBSetup,
+   timetype = cms.string('runnumber'),
+   toGet = cms.VPSet(cms.PSet(
+       record = cms.string('BTauGenericMVAJetTagComputerRcd'),
+               tag = cms.string('MVAJetTags')
+   )),
+   connect = cms.string("sqlite_file:MVAJetTags_newCMVA.db"),
+   #connect = cms.string('frontier://FrontierDev/CMS_COND_BTAU'),
+   BlobStreamerName = cms.untracked.string('TBufferBlobStreamingService')
+)
+process.es_prefer_BTauMVAJetTagComputerRecord = cms.ESPrefer("PoolDBESSource","BTauMVAJetTagComputerRecord")
+#############################
+
+
+##################################
+from RecoBTag.Configuration.RecoBTag_cff import *
+
 ## MessageLogger
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
 # If you run over many samples and you save the log, remember to reduce
@@ -282,8 +307,7 @@ process.MessageLogger.cerr.default.limit = 10
 ## Input files
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-        '/store/relval/CMSSW_7_4_0_pre8/RelValZpTT_1500_13TeV/GEN-SIM-RECO/MCRUN2_74_V7-v1/00000/58F8AA88-4BBD-E411-95D4-0025905A48F0.root'
-        #'file:/nfs/dust/cms/user/marchesi/74Xdev/testfile/22E552FD-23B7-E411-B680-002618943911.root'
+        'file:///shome/jpata/btv/CMSSW_7_4_0_b/src/RecoBTag/000470E0-3B75-E411-8B90-00266CFFA604_ttjets_aod.root'
     )
 )
 if options.miniAOD:
@@ -383,7 +407,7 @@ else:
        (pfIsolationR04().sumChargedHadronPt+
 	max(0.,pfIsolationR04().sumNeutralHadronEt+
 	pfIsolationR04().sumPhotonEt-
-	0.50*pfIsolationR04().sumPUPt))/pt < 0.20 && 
+	0.50*pfIsolationR04().sumPUPt))/pt < 0.20 &&
 	(isPFMuon && (isGlobalMuon || isTrackerMuon) )'''))
     process.selectedElectrons = cms.EDFilter("CandPtrSelector", src = cms.InputTag("slimmedElectrons"), cut = cms.string('''abs(eta)<2.5 && pt>20. &&
 	gsfTrack.isAvailable() &&
@@ -943,7 +967,7 @@ process.filtSeq = cms.Sequence(
 ## Define analyzer sequence
 process.analyzerSeq = cms.Sequence( )
 if options.processStdAK4Jets:
-    process.analyzerSeq += process.btagana
+    process.analyzerSeq += process.btagging * process.btagana
 if options.runFatJets:
     process.analyzerSeq += process.btaganaFatJets
 if options.processStdAK4Jets and options.useTTbarFilter:
@@ -960,4 +984,4 @@ process.p = cms.Path(
 # Delete predefined output module (needed for running with CRAB)
 del process.out
 
-#open('pydump.py','w').write(process.dumpPython())
+open('pydump.py','w').write(process.dumpPython())
