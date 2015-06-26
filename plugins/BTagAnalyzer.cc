@@ -282,7 +282,8 @@ private:
   std::string trackCNegHPBJetTags_;
   
   std::string combinedMVABJetTags_;
-  std::string combinedMVANEWBJetTags_;
+  std::string combinedMVABJetTagsNEW_;
+  std::string combinedMVABJetTagsETH_;
   std::string combinedSVBJetTags_;
   std::string combinedSVNegBJetTags_;
   std::string combinedSVPosBJetTags_;
@@ -503,7 +504,8 @@ BTagAnalyzerT<IPTI,VTX>::BTagAnalyzerT(const edm::ParameterSet& iConfig):
   simpleSVNegHighPurBJetTags_   = iConfig.getParameter<std::string>("simpleSVNegHighPurBJetTags");
 
   combinedMVABJetTags_     = iConfig.getParameter<std::string>("combinedMVABJetTags");
-  combinedMVANEWBJetTags_     = iConfig.getParameter<std::string>("combinedMVANEWBJetTags");
+  combinedMVABJetTagsNEW_     = iConfig.getParameter<std::string>("combinedMVABJetTagsNEW");
+  combinedMVABJetTagsETH_     = iConfig.getParameter<std::string>("combinedMVABJetTagsETH");
   combinedSVBJetTags_     = iConfig.getParameter<std::string>("combinedSVBJetTags");
   combinedSVNegBJetTags_  = iConfig.getParameter<std::string>("combinedSVNegBJetTags");
   combinedSVPosBJetTags_  = iConfig.getParameter<std::string>("combinedSVPosBJetTags");
@@ -2109,19 +2111,9 @@ void BTagAnalyzerT<IPTI,VTX>::processJets(const edm::Handle<PatJetCollection>& j
     float BprobN = pjet->bDiscriminator(jetBPNegBJetTags_.c_str());
     float BprobP = pjet->bDiscriminator(jetBPPosBJetTags_.c_str());
 
-    //auto cMVADiscriminatorToken = mayConsume<reco::JetFloatAssociation::Container>(edm::InputTag("pfCombinedMVABJetTags"));
-    //auto cMVANEWDiscriminatorToken = mayConsume<reco::JetFloatAssociation::Container>(edm::InputTag("pfCombinedMVANEWBJetTags"));
-    //
-    //edm::Handle<reco::JetFloatAssociation::Container> cMVADiscriminator;
-    //edm::Handle<reco::JetFloatAssociation::Container> cMVANEWDiscriminator;
-    //iEvent.getByToken(cMVADiscriminatorToken, cMVADiscriminator);
-    //iEvent.getByToken(cMVANEWDiscriminatorToken, cMVANEWDiscriminator);
-
-    //float CombinedMVA = (*cMVADiscriminator)[jetRef];
-    //float CombinedMVANEW  = (*cMVANEWDiscriminator)[jetRef]; 
     float CombinedMVA = pjet->bDiscriminator(combinedMVABJetTags_.c_str());
-    float CombinedMVANEW = pjet->bDiscriminator(combinedMVANEWBJetTags_.c_str());
-    //std::cout << "combMVA " << CombinedMVA << " " << CombinedMVANEW << std::endl;
+    float CombinedMVANEW = pjet->bDiscriminator(combinedMVABJetTagsNEW_.c_str());
+    std::cout << "combMVA " << CombinedMVA << " " << CombinedMVANEW << std::endl;
 
     float CombinedSvtx  = pjet->bDiscriminator(combinedSVBJetTags_.c_str());
     float CombinedSvtxN = pjet->bDiscriminator(combinedSVNegBJetTags_.c_str());
