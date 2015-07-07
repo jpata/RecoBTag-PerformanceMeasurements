@@ -13,6 +13,10 @@ bTagAnalyzerCommon = cms.PSet(
     storeEventInfo           = cms.bool(True),
     storeTagVariables        = cms.bool(False),
     storeCSVTagVariables     = cms.bool(False),
+    fillsvTagInfo               = cms.bool(False),
+    fillPU               = cms.bool(False),
+    fillGenPruned               = cms.bool(True),
+    fillQuarks               = cms.bool(False),
     selTagger                = cms.int32(2),
     MaxEta                   = cms.double(2.5),
     MinPt                    = cms.double(20.0),
@@ -31,6 +35,8 @@ bTagAnalyzerCommon = cms.PSet(
     candidates               = cms.InputTag("particleFlow"),
     maxDeltaR                = cms.double(0.4),
     explicitJTA              = cms.bool(False),
+    subJetMaxDeltaR          = cms.double(0.4),
+    subJetExplicitJTA        = cms.bool(True),
     use_ttbar_filter         = cms.bool(False),
     channel                  = cms.InputTag("ttbarselectionproducer"),
     beta                     = cms.double(1.0),
@@ -123,7 +129,10 @@ bTagAnalyzerCommon = cms.PSet(
         "HLT_HT700_v*",
         "HLT_HT750_L1FastJet_v*",
         "HLT_HT750_v*",
-        "HLT_HT2000_v*"
+        "HLT_HT2000_v*",
+        "HLT_PFJet60_v*",
+        "HLT_PFJet450_v*",
+        "HLT_PFJet500_v*"
     ),
     TTbarTriggerPathNames = cms.vstring(
         # trigger for ttbar: https://twiki.cern.ch/twiki/bin/viewauth/CMS/TWikiTopRefEventSel#Triggers
