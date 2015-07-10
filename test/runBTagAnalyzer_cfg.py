@@ -202,8 +202,8 @@ bTagDiscriminatorsLegacy = [
    ,'positiveSoftPFElectronBJetTags'
    ,'negativeSoftPFElectronBJetTags'
    ,'combinedMVABJetTags'
-   ,'combinedMVABJetTagsNEW'
-   ,'combinedMVABJetTagsETH'
+   ,'combinedMVANEWBJetTags'
+   ,'combinedMVAETHBJetTags'
 ]
 bTagDiscriminators = [
     'pfJetBProbabilityBJetTags'
@@ -233,8 +233,8 @@ bTagDiscriminators = [
    ,'positiveSoftPFElectronBJetTags'
    ,'negativeSoftPFElectronBJetTags'
    ,'pfCombinedMVABJetTags'
-   ,'pfCombinedMVABJetTagsNEW'
-   ,'pfCombinedMVABJetTagsETH'
+   ,'pfCombinedMVANEWBJetTags'
+   ,'pfCombinedMVAETHBJetTags'
 ]
 
 ## Legacy taggers not supported with MiniAOD
@@ -287,10 +287,10 @@ process.BTauMVAJetTagComputerRecord = cms.ESSource("PoolDBESSource",
    process.CondDBSetup,
    timetype = cms.string('runnumber'),
    toGet = cms.VPSet(cms.PSet(
-       record = cms.string('BTauGenericMVAJetTagComputerRcd'),
-               tag = cms.string('MVAJetTags')
+   record = cms.string('BTauGenericMVAJetTagComputerRcd'),
+   tag = cms.string('MVAJetTags')
    )),
-   connect = cms.string('sqlite_fip:RecoBTag/PerformanceMeasurements/data/MVAJetTags_newCMVA.db'),
+   connect = cms.string('sqlite_fip:RecoBTag/PerformanceMeasurements/data/MVAJetTags_newCMVA_SE_bugFixed.db'),
    #connect = cms.string('frontier://FrontierDev/CMS_COND_BTAU'),
    BlobStreamerName = cms.untracked.string('TBufferBlobStreamingService')
 )

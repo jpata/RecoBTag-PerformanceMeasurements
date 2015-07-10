@@ -43,6 +43,7 @@ class JetInfoBranches {
     float Jet_SvxHP[nMaxJets_];
     float Jet_CombMVA[nMaxJets_];
     float Jet_CombMVANEW[nMaxJets_];
+    float Jet_CombMVAETH[nMaxJets_];
     float Jet_CombSvxN[nMaxJets_];
     float Jet_CombSvxP[nMaxJets_];
     float Jet_CombSvx[nMaxJets_];
@@ -350,6 +351,7 @@ class JetInfoBranches {
       tree->Branch((name+"Jet_SvxHP").c_str(),       Jet_SvxHP      ,(name+"Jet_SvxHP["+name+"nJet]/F").c_str());
       tree->Branch((name+"Jet_CombMVA").c_str(),    Jet_CombMVA   ,(name+"Jet_CombMVA["+name+"nJet]/F").c_str());
       tree->Branch((name+"Jet_CombMVANEW").c_str(),    Jet_CombMVANEW   ,(name+"Jet_CombMVANEW["+name+"nJet]/F").c_str());
+      tree->Branch((name+"Jet_CombMVAETH").c_str(),    Jet_CombMVAETH   ,(name+"Jet_CombMVAETH["+name+"nJet]/F").c_str());
       tree->Branch((name+"Jet_CombSvxN").c_str(),    Jet_CombSvxN   ,(name+"Jet_CombSvxN["+name+"nJet]/F").c_str());
       tree->Branch((name+"Jet_CombSvxP").c_str(),    Jet_CombSvxP   ,(name+"Jet_CombSvxP["+name+"nJet]/F").c_str());
       tree->Branch((name+"Jet_CombSvx").c_str(),     Jet_CombSvx    ,(name+"Jet_CombSvx["+name+"nJet]/F").c_str());
@@ -697,6 +699,7 @@ class JetInfoBranches {
       tree->SetBranchAddress((name+"Jet_SvxHP").c_str(),       Jet_SvxHP       );
       tree->SetBranchAddress((name+"Jet_CombMVA").c_str(),    Jet_CombMVA    );
       tree->SetBranchAddress((name+"Jet_CombMVANEW").c_str(),    Jet_CombMVANEW    );
+      tree->SetBranchAddress((name+"Jet_CombMVAETH").c_str(),    Jet_CombMVAETH    );
       tree->SetBranchAddress((name+"Jet_CombSvxN").c_str(),    Jet_CombSvxN    );
       tree->SetBranchAddress((name+"Jet_CombSvxP").c_str(),    Jet_CombSvxP    );
       tree->SetBranchAddress((name+"Jet_CombSvx").c_str(),     Jet_CombSvx     );
