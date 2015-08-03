@@ -126,7 +126,7 @@ options.register('usePruned', True,
     "Use pruned jets"
 )
 #Generally leave to False unless you know what you are doing
-options.register('runIVF', False, 
+options.register('runIVF', False,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "Run IVF, currently leave to False!"
@@ -202,8 +202,7 @@ bTagDiscriminatorsLegacy = [
    ,'positiveSoftPFElectronBJetTags'
    ,'negativeSoftPFElectronBJetTags'
    ,'combinedMVABJetTags'
-   ,'combinedMVANEWBJetTags'
-   ,'combinedMVAETHBJetTags'
+   ,'combinedMVAV2BJetTags'
 ]
 bTagDiscriminators = [
     'pfJetBProbabilityBJetTags'
@@ -233,8 +232,7 @@ bTagDiscriminators = [
    ,'positiveSoftPFElectronBJetTags'
    ,'negativeSoftPFElectronBJetTags'
    ,'pfCombinedMVABJetTags'
-   ,'pfCombinedMVANEWBJetTags'
-   ,'pfCombinedMVAETHBJetTags'
+   ,'pfCombinedMVAV2BJetTags'
 ]
 
 ## Legacy taggers not supported with MiniAOD
@@ -290,7 +288,7 @@ process.BTauMVAJetTagComputerRecord = cms.ESSource("PoolDBESSource",
    record = cms.string('BTauGenericMVAJetTagComputerRcd'),
    tag = cms.string('MVAJetTags')
    )),
-   connect = cms.string('sqlite_fip:RecoBTag/PerformanceMeasurements/data/MVAJetTags_newCMVA_SE_bugFixed.db'),
+   connect = cms.string('sqlite_fip:RecoBTag/PerformanceMeasurements/data/MVAJetTags_newCMVA.db'),
    #connect = cms.string('frontier://FrontierDev/CMS_COND_BTAU'),
    BlobStreamerName = cms.untracked.string('TBufferBlobStreamingService')
 )
@@ -311,7 +309,8 @@ process.MessageLogger.cerr.default.limit = 10
 ## Input files
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-        'file:///shome/jpata/btv/CMSSW_7_4_0_b/src/RecoBTag/000470E0-3B75-E411-8B90-00266CFFA604_ttjets_aod.root'
+        #'file:///shome/jpata/btv/CMSSW_7_4_0_b/src/RecoBTag/000470E0-3B75-E411-8B90-00266CFFA604_ttjets_aod.root'
+        '/store/mc/RunIISpring15DR74/TTJets_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/AODSIM/Asympt25ns_MCRUN2_74_V9-v1/00000/00B2F04A-E301-E511-8CF3-0025905A6090.root'
     )
 )
 if options.miniAOD:
@@ -364,10 +363,6 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_' + ('data' if optio
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load("SimGeneral.HepPDTESSource.pythiapdt_cfi")
-process.load("SimTracker.TrackAssociation.TrackAssociatorByChi2_cfi")
-process.load("SimTracker.TrackAssociation.quickTrackAssociatorByHits_cfi")
-process.load("SimTracker.TrackAssociatorProducers.quickTrackAssociatorByHits_cfi")
-process.load("SimTracker.TrackAssociation.TrackAssociatorByHits_cfi")
 process.load("SimTracker.TrackHistory.TrackHistory_cff")
 process.load("SimTracker.TrackHistory.TrackClassifier_cff")
 process.load("RecoBTag.Configuration.RecoBTag_cff")
@@ -891,7 +886,7 @@ if options.useLegacyTaggers:
 #   process.btagana.produceAllTrackTree  = True
 #   process.btagana.producePtRelTemplate = False
 #------------------
-process.btagana.tracksColl            = cms.InputTag(trackSource) 
+process.btagana.tracksColl            = cms.InputTag(trackSource)
 process.btagana.useSelectedTracks     = True  ## False if you want to run on all tracks : for commissioning studies
 process.btagana.useTrackHistory       = False ## Can only be used with GEN-SIM-RECODEBUG files
 process.btagana.fillsvTagInfo = False ## True if you want to store information relative to the svTagInfos, set to False if produceJetTrackTree is set to False

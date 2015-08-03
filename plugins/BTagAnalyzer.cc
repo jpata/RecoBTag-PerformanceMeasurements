@@ -67,8 +67,8 @@
 
 #include "DataFormats/BTauReco/interface/SecondaryVertexTagInfo.h"
 
-#include "SimTracker/TrackAssociation/interface/TrackAssociatorBase.h"
-#include "SimTracker/TrackAssociation/interface/TrackAssociatorByHits.h"
+//#include "SimTracker/TrackAssociation/interface/TrackAssociatorBase.h"
+//#include "SimTracker/TrackAssociation/interface/TrackAssociatorByHits.h"
 #include "SimTracker/TrackHistory/interface/TrackCategories.h"
 #include "SimTracker/TrackHistory/interface/TrackClassifier.h"
 #include "DataFormats/BTauReco/interface/SoftLeptonTagInfo.h"
@@ -283,8 +283,7 @@ private:
   std::string trackCNegHPBJetTags_;
   
   std::string combinedMVABJetTags_;
-  std::string combinedMVANEWBJetTags_;
-  std::string combinedMVAETHBJetTags_;
+  std::string combinedMVAV2BJetTags_;
   std::string combinedSVBJetTags_;
   std::string combinedSVNegBJetTags_;
   std::string combinedSVPosBJetTags_;
@@ -537,8 +536,7 @@ BTagAnalyzerT<IPTI,VTX>::BTagAnalyzerT(const edm::ParameterSet& iConfig):
   simpleSVNegHighPurBJetTags_   = iConfig.getParameter<std::string>("simpleSVNegHighPurBJetTags");
 
   combinedMVABJetTags_     = iConfig.getParameter<std::string>("combinedMVABJetTags");
-  combinedMVANEWBJetTags_     = iConfig.getParameter<std::string>("combinedMVANEWBJetTags");
-  combinedMVAETHBJetTags_     = iConfig.getParameter<std::string>("combinedMVAETHBJetTags");
+  combinedMVAV2BJetTags_     = iConfig.getParameter<std::string>("combinedMVAV2BJetTags");
   combinedSVBJetTags_     = iConfig.getParameter<std::string>("combinedSVBJetTags");
   combinedSVNegBJetTags_  = iConfig.getParameter<std::string>("combinedSVNegBJetTags");
   combinedSVPosBJetTags_  = iConfig.getParameter<std::string>("combinedSVPosBJetTags");
@@ -2166,8 +2164,7 @@ void BTagAnalyzerT<IPTI,VTX>::processJets(const edm::Handle<PatJetCollection>& j
     float BprobP = pjet->bDiscriminator(jetBPPosBJetTags_.c_str());
 
     float CombinedMVA = pjet->bDiscriminator(combinedMVABJetTags_.c_str());
-    float CombinedMVANEW = pjet->bDiscriminator(combinedMVANEWBJetTags_.c_str());
-    float CombinedMVAETH = pjet->bDiscriminator(combinedMVAETHBJetTags_.c_str());
+    float CombinedMVAV2 = pjet->bDiscriminator(combinedMVAV2BJetTags_.c_str());
 
     float CombinedSvtx  = pjet->bDiscriminator(combinedSVBJetTags_.c_str());
     float CombinedSvtxN = pjet->bDiscriminator(combinedSVNegBJetTags_.c_str());
@@ -2197,8 +2194,7 @@ void BTagAnalyzerT<IPTI,VTX>::processJets(const edm::Handle<PatJetCollection>& j
     //    << "sm=" << SoftM << " " 
     //    << "se=" << SoftE << " " 
     //    << "cmva=" << CombinedMVA << " " 
-    //    << "cmvanew=" << CombinedMVANEW << " " 
-    //    << "cmvaeth=" << CombinedMVAETH << " " 
+    //    << "cmvaeth=" << CombinedMVAV2 << " " 
     //    << std::endl;
 
     float DoubleSV = pjet->bDiscriminator(doubleSVBJetTags_.c_str());
@@ -2215,8 +2211,7 @@ void BTagAnalyzerT<IPTI,VTX>::processJets(const edm::Handle<PatJetCollection>& j
     JetInfo[iJetColl].Jet_SvxNHP[JetInfo[iJetColl].nJet]   = SvtxNHP;
     JetInfo[iJetColl].Jet_SvxHP[JetInfo[iJetColl].nJet]    = SvtxHP;
     JetInfo[iJetColl].Jet_CombMVA[JetInfo[iJetColl].nJet] = CombinedMVA;
-    JetInfo[iJetColl].Jet_CombMVANEW[JetInfo[iJetColl].nJet] = CombinedMVANEW;
-    JetInfo[iJetColl].Jet_CombMVAETH[JetInfo[iJetColl].nJet] = CombinedMVAETH;
+    JetInfo[iJetColl].Jet_CombMVAV2[JetInfo[iJetColl].nJet] = CombinedMVAV2;
     JetInfo[iJetColl].Jet_CombSvxN[JetInfo[iJetColl].nJet] = CombinedSvtxN;
     JetInfo[iJetColl].Jet_CombSvxP[JetInfo[iJetColl].nJet] = CombinedSvtxP;
     JetInfo[iJetColl].Jet_CombSvx[JetInfo[iJetColl].nJet]  = CombinedSvtx;
